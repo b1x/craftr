@@ -96,6 +96,10 @@ class Graph(object):
     self.outfiles = {}
     self.vars = {}
     self.tools = {}
+    self.pools = {}
+
+  def add_pool(self, pool_name, pool_depth):
+    self.pools[pool_name] = pool_depth
 
   def add_tool(self, tool):
     """
@@ -167,6 +171,13 @@ class Graph(object):
     writer.comment('This file was automatically generated with Craftr.')
     writer.comment('It is not recommended to edit this file manually.')
     writer.newline()
+
+    if self.pools:
+      writer.comment('Pools')
+      writer.comment('-----')
+      for name, depth in self.pools.items():
+        writer.pool(name, depth)
+        writer.newline()
 
     if self.vars:
       for key, value in self.vars.items():
