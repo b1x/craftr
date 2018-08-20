@@ -14,7 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from pip.req import parse_requirements
+try: # for pip >= 10
+    from pip._internal.req import parse_requirements
+except ImportError: # for pip <= 9.0.3
+    from pip.req import parse_requirements
+
 from setuptools import setup, find_packages
 
 import functools
@@ -29,9 +33,9 @@ if sys.version < '3.4' or sys.version >= '3.6':
   print('-----------------------------------------------------------------')
 
 # parse_requirements() interface has changed in Pip 6.0
-if pip.__version__ >= '6.0':
-  parse_requirements = functools.partial(
-      parse_requirements, session=pip.download.PipSession())
+# if pip.__version__ >= '6.0':
+parse_requirements = functools.partial(
+    parse_requirements, session=pip._internal.download.PipSession())
 
 
 def readme():
